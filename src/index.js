@@ -84,6 +84,18 @@ class ChooseGameScene extends Phaser.Scene {
             .setStrokeStyle(4, 0x000000);
 
         this.add.text(400, 350, 'Jogo 2', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+
+        // Back button
+        this.add.rectangle(400, 500, 200, 50, 0xffffff)
+            .setInteractive()
+            .on('pointerdown', this.loadMenuScene, this)
+            .setStrokeStyle(4, 0x000000);
+
+        this.add.text(400, 500, 'Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+    }
+
+    loadMenuScene() {
+        this.scene.start('Menu');
     }
 }
 
