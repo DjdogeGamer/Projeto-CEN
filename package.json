@@ -35,6 +35,6 @@
   "dependencies": {
     "aws-sdk": "^2.1362.0",
     "phaser": "^3.50.0",
-    "sql.js": "^1.8.0"
+    "sqlite3": "^5.0.2"
   }
 }

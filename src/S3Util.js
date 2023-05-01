@@ -1,13 +1,12 @@
-// Nota: Esse arquivo é a versão classe do s3.js
-
+// S3Util.js
 const AWS = require('aws-sdk');
 const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
 const os = require('os');
 const path = require('path');
 
-class SQLiteS3 {
-    constructor(bucketName, fileName, accessKeyId, secretAccessKey) {
+class S3Util {
+    constructor(bucketName, accessKeyId, secretAccessKey) {
         // Configuração do SDK da AWS
         AWS.config.update({
             accessKeyId,
@@ -16,23 +15,18 @@ class SQLiteS3 {
 
         // Criação do objeto S3
         this.s3 = new AWS.S3({apiVersion: '2006-03-01'});
-
-        // Parâmetros do bucket e do arquivo SQLite
         this.bucketName = bucketName;
-        this.fileName = fileName;
-
-        // Caminho para a pasta temporária do projeto
-        this.tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'game-'));
-
-        // Caminho para o arquivo SQLite temporário
-        this.tempFilePath = path.join(this.tempDir, fileName);
     }
 
-    executeQuery(sqlQuery, callback) {
+
+    executeQuery(sqlQuery, fileName, callback) {
         // Baixa o arquivo SQLite para a pasta temporária
+        this.tempDir = fs.mkdtempSync(path.join(os.tmpdir(), 'game-'));
+        this.tempFilePath = path.join(this.tempDir, fileName);
+
         this.s3.getObject({
             Bucket: this.bucketName,
-            Key: this.fileName
+            Key: fileName
         }, (err, data) => {
             if (err) {
                 console.error(err);
@@ -62,7 +56,7 @@ class SQLiteS3 {
                                     // Envia o arquivo temporário para o S3
                                     this.s3.putObject({
                                         Bucket: this.bucketName,
-                                        Key: this.fileName,
+                                        Key: fileName,
                                         Body: data
                                     }, (err) => {
                                         if (err) {
@@ -88,6 +82,20 @@ class SQLiteS3 {
             }
         });
     }
+
+    loadAsset(fileName, callback) {
+        // Pega o arquivo do S3 e retorna o conteúdo para o callback
+        this.s3.getObject({
+            Bucket: this.bucketName,
+            Key: fileName
+        }, (err, data) => {
+            if (err) {
+                console.error(err);
+            } else {
+                callback(data.Body);
+            }
+        });
+    }
 }
 
-module.exports = SQLiteS3;
+module.exports = S3Util;
