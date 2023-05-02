@@ -1,9 +1,15 @@
 import Phaser from 'phaser';
 import bgImg from './assets/menu_bg.jpg';
 
+// TODO: Fix local dependencies
+//const S3Util = require('./S3Util');
+const bucketName = 'sqlite-js-ispg-test';
+const accessKeyId = 'AKIA4ZDOYH5F6H3ASIGQ';
+const secretAccessKey = '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';
+
 class Menu extends Phaser.Scene {
     constructor() {
-        super( {key: 'Menu'});
+        super({key: 'Menu'});
     }
 
     preload() {
@@ -218,7 +224,11 @@ const config = {
     parent: 'phaser-example',
     width: 800,
     height: 600,
-    scene: [Menu, ChooseGameScene, Game1, Game2, Game3]
+    scene: [Menu, ChooseGameScene, Game1, Game2, Game3],
+    scale: {
+        mode: Phaser.Scale.FIT,
+        autoCenter: Phaser.Scale.CENTER_BOTH
+    }
 };
 
 const game = new Phaser.Game(config);
