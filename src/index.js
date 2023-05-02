@@ -127,16 +127,23 @@ class Game1 extends Phaser.Scene {
     }
 
     create() {
-        // Menu background
-        this.add.image(400, 300, 'background');
-
-        // Menu Title
-        this.add.rectangle(400, 200, 550, 100, 0x000000)
-        this.add.text(400, 200, 'Jogo 1 Exemplo', {
-            fontFamily: 'Arial',
-            fontSize: 64,
-            color: '#ffffff'
-        }).setOrigin(0.5);
+        // Background color
+        this.cameras.main.setBackgroundColor('#cccccc');
+        // Email inbox title
+        this.add.text(800, 600, 'Email inbox', {fontFamily: 'Arial', fontSize: 32, color: '#000000'}).setOrigin(0.5);
+        // Email list background
+        this.add.rectangle(100, 150, 600, 350, 0xffffff);
+        // Email list items
+        this.add.text(120, 170, '1. You have won a prize!', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+        this.add.text(120, 210, '2. Urgent message from your bank', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+        this.add.text(120, 250, '3. Important security update', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+        this.add.text(120, 290, '4. Your account has been compromised', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+        // Close button
+        this.add.rectangle(700, 50, 50, 50, 0xff0000).setInteractive().on('pointerdown', function () {
+            this.scene.start('MyGame');
+        }, this);
+        this.add.text(700, 50, 'X', {fontFamily: 'Arial', fontSize: 24, color: '#ffffff'}).setOrigin(0.5);
+    
 
         this.add.rectangle(400, 500, 200, 50, 0xffffff)
             .setInteractive()
@@ -161,27 +168,105 @@ class Game2 extends Phaser.Scene {
     }
 
     create() {
-        // Menu background
-        this.add.image(400, 300, 'background');
+        // Background color
+    this.cameras.main.setBackgroundColor('#cccccc');
 
-        // Menu Title
-        this.add.rectangle(400, 200, 550, 100, 0x000000)
-        this.add.text(400, 200, 'Jogo 2 Exemplo', {
-            fontFamily: 'Arial',
-            fontSize: 64,
-            color: '#ffffff'
-        }).setOrigin(0.5);
+    // Email inbox title
+    this.add.text(420, 50, 'Email inbox', {fontFamily: 'Arial', fontSize: 32, color: '#000000'}).setOrigin(0.5);
 
+    // Email list background
+    this.add.rectangle(400, 300, 600, 350, 0xffffff);
+
+    // Email list items
+    const email1 = this.add.text(120, 170, '1. You have won a prize!', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+
+    // Add button to email item
+    const email1Button = this.add.graphics()
+    .fillStyle(0x00ff00)
+    .fillRoundedRect(575, 160, 60, 35, 15)
+    .setInteractive()
+    .on('pointerdown', function () {
+        const message = 'Congratulations! You have won a prize.';
+        this.add.text(400, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+    }, this);
+    this.add.text(605, 177, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
+
+
+    const email2 = this.add.text(120, 210, '2. Urgent message from your bank', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+
+    // Add button to email item
+    const email2Button = this.add.rectangle(500, 210, 100, 40, 0x00ff00)
+        .setInteractive()
+        .on('pointerdown', function () {
+            const message = 'This is an urgent message from your bank.';
+            this.add.text(400, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+        }, this);
+    this.add.text(500, 210, 'Click', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
+
+    // Close button
+    this.add.rectangle(700, 50, 50, 50, 0xff0000).setInteractive().on('pointerdown', function () {
+        this.scene.start('MyGame');
+    }, this);
+    this.add.text(700, 50, 'X', {fontFamily: 'Arial', fontSize: 24, color: '#ffffff'}).setOrigin(0.5);
+
+    this.add.rectangle(400, 500, 200, 50, 0xffffff)
+        .setInteractive()
+        .on('pointerdown', this.loadChooseGameScene, this)
+        .setStrokeStyle(4, 0x000000);
+
+    this.add.text(400, 500, 'Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+    
+        const email3 = this.add.text(120, 250, '3. Important security update', {fontFamily: 'Arial', fontSize: 20, color: '#000000'})
+            .setInteractive()
+            .on('pointerdown', function () {
+                // Code to handle clicking on email3
+            });
+        const email4 = this.add.text(120, 290, '4. Your account has been compromised', {fontFamily: 'Arial', fontSize: 20, color: '#000000'})
+            .setInteractive()
+            .on('pointerdown', function () {
+                // Code to handle clicking on email4
+            });
+    
+        // Close button
+        this.add.rectangle(700, 50, 50, 50, 0xff0000)
+            .setInteractive()
+            .on('pointerdown', function () {
+                this.scene.start('MyGame');
+            }, this);
+        this.add.text(700, 50, 'X', {fontFamily: 'Arial', fontSize: 24, color: '#ffffff'}).setOrigin(0.5);
+    
+        // Back button
         this.add.rectangle(400, 500, 200, 50, 0xffffff)
             .setInteractive()
             .on('pointerdown', this.loadChooseGameScene, this)
             .setStrokeStyle(4, 0x000000);
-
         this.add.text(400, 500, 'Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
     }
-
+    
     loadChooseGameScene() {
         this.scene.start('ChooseGameScene');
+    }
+
+    showPopup(title, message) {
+        // Create the popup background
+        const popupBackground = this.add.rectangle(400, 300, 500, 200, 0xffffff);
+        popupBackground.setStrokeStyle(4, 0x000000);
+    
+        // Add the popup title and message
+        this.add.text(400, 250, title, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+        this.add.text(400, 300, message, {fontFamily: 'Arial', fontSize: 20, color: '#000000'}).setOrigin(0.5);
+    
+        // Add the close button
+        const closeButton = this.add.rectangle(400, 350, 100, 50, 0xff0000)
+            .setInteractive()
+            .on('pointerdown', function () {
+                // Remove the popup from the scene
+                popupBackground.destroy();
+                popupTitle.destroy();
+                popupMessage.destroy();
+                closeButton.destroy();
+            }, this);
+        this.add.text(400, 350, 'Close', {fontFamily: 'Arial', fontSize: 20, color: '#ffffff'}).setOrigin(0.5);
     }
 }
 
