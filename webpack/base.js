@@ -6,6 +6,9 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 module.exports = {
   mode: "development",
   devtool: "eval-source-map",
+  externals: {
+    sqlite3: "commonjs sqlite3"
+  },
   module: {
     rules: [
       {
@@ -22,7 +25,7 @@ module.exports = {
       {
         test: /\.(gif|png|jpe?g|svg|xml)$/i,
         use: "file-loader"
-      }
+      },
     ]
   },
   plugins: [

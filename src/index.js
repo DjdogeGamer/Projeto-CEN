@@ -1,8 +1,7 @@
 import Phaser from 'phaser';
 import bgImg from './assets/menu_bg.jpg';
+const sqlite3 = require('sqlite3').verbose();
 
-// TODO: Fix local dependencies
-//const S3Util = require('./S3Util');
 const bucketName = 'sqlite-js-ispg-test';
 const accessKeyId = 'AKIA4ZDOYH5F6H3ASIGQ';
 const secretAccessKey = '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';
@@ -154,6 +153,7 @@ class QuizGame extends Phaser.Scene {
         if (this.currentQuestion >= this.questions.length) {
             // Exibe a pontuação final e reinicia o jogo
             this.add.rectangle(400, 150, 500, 90, 0x000000).setOrigin(0.5);
+            // impede que o usuário clique em outra resposta
             questionBox = this.add.text(400, 150, "FIM DE JOGO! Pontuação final: " + this.score, {
                 fontFamily: 'Arial',
                 fontSize: 18,
@@ -187,6 +187,10 @@ class QuizGame extends Phaser.Scene {
                         // Se a resposta estiver correta, adiciona pontos e passa para a próxima pergunta
                         this.score += 10;
                         this.currentQuestion++;
+                        // impede que o usuário clique em outra resposta
+                        Answer0.disableInteractive();
+                        Answer1.disableInteractive();
+                        Answer2.disableInteractive();
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
@@ -196,6 +200,10 @@ class QuizGame extends Phaser.Scene {
                         // Se a resposta estiver errada, mostra a explicação e passa para a próxima pergunta
                         questionBox.setText(this.questions[this.currentQuestion].explanation);
                         this.currentQuestion++;
+                        // impede que o usuário clique em outra resposta
+                        Answer0.disableInteractive();
+                        Answer1.disableInteractive();
+                        Answer2.disableInteractive();
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
@@ -220,6 +228,10 @@ class QuizGame extends Phaser.Scene {
                         // Se a resposta estiver correta, adiciona pontos e passa para a próxima pergunta
                         this.score += 10;
                         this.currentQuestion++;
+                        // impede que o usuário clique em outra resposta
+                        Answer0.disableInteractive();
+                        Answer1.disableInteractive();
+                        Answer2.disableInteractive();
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
@@ -229,6 +241,10 @@ class QuizGame extends Phaser.Scene {
                         // Se a resposta estiver errada, mostra a explicação e passa para a próxima pergunta
                         questionBox.setText(this.questions[this.currentQuestion].explanation);
                         this.currentQuestion++;
+                        // impede que o usuário clique em outra resposta
+                        Answer0.disableInteractive();
+                        Answer1.disableInteractive();
+                        Answer2.disableInteractive();
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
@@ -253,6 +269,10 @@ class QuizGame extends Phaser.Scene {
                         // Se a resposta estiver correta, adiciona pontos e passa para a próxima pergunta
                         this.score += 10;
                         this.currentQuestion++;
+                        // impede que o usuário clique em outra resposta
+                        Answer0.disableInteractive();
+                        Answer1.disableInteractive();
+                        Answer2.disableInteractive();
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
@@ -262,6 +282,10 @@ class QuizGame extends Phaser.Scene {
                         // Se a resposta estiver errada, mostra a explicação e passa para a próxima pergunta
                         questionBox.setText(this.questions[this.currentQuestion].explanation);
                         this.currentQuestion++;
+                        // impede que o usuário clique em outra resposta
+                        Answer0.disableInteractive();
+                        Answer1.disableInteractive();
+                        Answer2.disableInteractive();
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
