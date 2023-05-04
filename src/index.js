@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import bgImg from './assets/menu_bg.jpg';
-const sqlite3 = require('sqlite3').verbose();
+//import S3Util from './S3Util';
 
 const bucketName = 'sqlite-js-ispg-test';
 const accessKeyId = 'AKIA4ZDOYH5F6H3ASIGQ';
