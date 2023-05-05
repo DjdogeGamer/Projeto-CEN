@@ -1,10 +1,5 @@
 import Phaser from 'phaser';
 import bgImg from './assets/menu_bg.jpg';
-//import S3Util from './S3Util';
-
-const bucketName = 'sqlite-js-ispg-test';
-const accessKeyId = 'AKIA4ZDOYH5F6H3ASIGQ';
-const secretAccessKey = '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';
 
 class Menu extends Phaser.Scene {
     constructor() {
@@ -12,9 +7,6 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
-        //this.load.image('logo', logoImg);
-
-        // load background
         this.load.image('background', bgImg);
     }
 
@@ -85,7 +77,7 @@ class ChooseGameScene extends Phaser.Scene {
         // Game 2
         this.add.rectangle(400, 350, 100, 50, 0xffffff)
             .setInteractive()
-            .on('pointerdown', this.loadQuizGameScene, this)
+            .on('pointerdown', this.loadGame2, this)
             .setStrokeStyle(4, 0x000000);
 
         this.add.text(400, 350, 'Jogo 2', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
@@ -125,19 +117,31 @@ class QuizGame extends Phaser.Scene {
         this.questions = [
             {
                 question: "Qual é o nome da técnica de ataque que consiste em enviar um grande volume de tráfego para um servidor, com o objetivo de sobrecarregá-lo e torná-lo inacessível?",
-                choices: ["DDoS", "Phishing", "Ransomware"],
+                choices: [
+                    "DDoS",
+                    "Phishing",
+                    "Ransomware"
+                ],
                 correctAnswer: 0,
                 explanation: "O ataque DDoS (Distributed Denial of Service) é uma técnica que consiste em sobrecarregar um servidor com tráfego falso, deixando-o inacessível para usuários legítimos."
             },
             {
                 question: "O que é um phishing?",
-                choices: ["Um ataque que consiste em enviar um e-mail falso, com o objetivo de enganar o destinatário e fazê-lo revelar informações confidenciais", "Um ataque que consiste em enviar um grande volume de tráfego para um servidor, com o objetivo de sobrecarregá-lo e torná-lo inacessível", "Um tipo de vírus que criptografa os arquivos do usuário e exige o pagamento de um resgate para liberá-los"],
+                choices: [
+                    "Um ataque que consiste em enviar um e-mail falso, com o objetivo de enganar o destinatário e fazê-lo revelar informações confidenciais",
+                    "Um ataque que consiste em enviar um grande volume de tráfego para um servidor, com o objetivo de sobrecarregá-lo e torná-lo inacessível",
+                    "Um tipo de vírus que criptografa os arquivos do usuário e exige o pagamento de um resgate para liberá-los"
+                ],
                 correctAnswer: 0,
                 explanation: "Phishing é um tipo de ataque que consiste em enganar o usuário para que ele revele informações confidenciais, como senhas ou números de cartão de crédito. Isso geralmente é feito por meio de e-mails falsos que parecem ser legítimos."
             },
             {
                 question: "O que é um firewall?",
-                choices: ["Um software ou hardware que monitora e controla o tráfego de rede, permitindo ou bloqueando o acesso com base em um conjunto de regras de segurança", "Um ataque que consiste em enviar um grande volume de tráfego para um servidor, com o objetivo de sobrecarregá-lo e torná-lo inacessível", "Um tipo de vírus que criptografa os arquivos do usuário e exige o pagamento de um resgate para liberá-los"],
+                choices: [
+                    "Um software ou hardware que monitora e controla o tráfego de rede, permitindo ou bloqueando o acesso com base em um conjunto de regras de segurança",
+                    "Um dispositivo que verifica se um usuário é quem ele diz ser, geralmente por meio de um código enviado para o seu celular",
+                    "Um tipo de malware que bloquea todas as portas de rede do computador impedindo que o usuário acesse a Internet"
+                ],
                 correctAnswer: 0,
                 explanation: "Um firewall é um software ou hardware que monitora e controla o tráfego de rede, permitindo ou bloqueando o acesso com base em um conjunto de regras de segurança."
             }
@@ -159,7 +163,7 @@ class QuizGame extends Phaser.Scene {
                 fontSize: 18,
                 color: '#ffffff',
                 wordWrap: {width: 500, useAdvancedWrap: true}
-            } ).setOrigin(0.5);
+            }).setOrigin(0.5);
 
             setTimeout(() => {
                 this.score = 0;

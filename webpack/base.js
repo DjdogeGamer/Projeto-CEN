@@ -6,9 +6,6 @@ const { CleanWebpackPlugin } = require("clean-webpack-plugin");
 module.exports = {
   mode: "development",
   devtool: "eval-source-map",
-  externals: {
-    sqlite3: "commonjs sqlite3",
-  },
   module: {
     rules: [
       {
