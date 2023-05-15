@@ -30,11 +30,10 @@
     "webpack": "^4.41.2",
     "webpack-cli": "^3.3.10",
     "webpack-dev-server": "^3.9.0",
-    "webpack-merge": "^4.2.2"
+    "webpack-merge": "^4.2.2",
+    "webpack-node-externals": "^3.0.0"
   },
   "dependencies": {
-    "aws-sdk": "^2.1362.0",
-    "phaser": "^3.50.0",
-    "sqlite3": "^5.0.2"
+    "phaser": "^3.50.0"
   }
 }
