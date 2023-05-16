@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import bgImg from './assets/menu_bg.jpg';
 import game2_1 from './assets/game2_1.png';
+import monitor from './assets/monitor.png';
 
 class Menu extends Phaser.Scene {
     constructor() {
@@ -317,40 +318,59 @@ class Game2 extends Phaser.Scene {
     }
 
     preload() {
-
+        this.load.image('monitor', monitor);
+        let score = 0;
+        let scoreText;
     }
 
     create() {
         
         // Nível 1 background
-        this.add.image(400, 300, 'game2_1');
-    
-        // Email inbox title
-        this.add.text(420, 50, 'Email inbox', {fontFamily: 'Arial', fontSize: 32, color: '#000000'}).setOrigin(0.5);
+        this.add.image(400, 300, 'monitor');
     
         // Email list background
-        this.add.rectangle(400, 300, 450, 250, 0xffffff);
+        this.add.rectangle(390, 253, 395, 250, 0xfddddd);
+        
+        // Email inbox title
+        this.add.text(400, 150, 'Email inbox', {fontFamily: 'Arial', fontSize: 32, color: '#000000'}).setOrigin(0.5);
     
         // Email list items
-        const email1 = this.add.text(180, 220, '1. You have won a prize!', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+        const email1 = this.add.text(200, 220, '1. You have won a prize!', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+
+// Add button to email item
+const email1Button = this.add.graphics()
+    .fillStyle(0x00ff00)
+    .fillRoundedRect(555, 210, 60, 35, 15)
+    .setInteractive();
+
+email1Button.on('pointerdown', () => {
+    const message = 'Congratulations! You have won a prize.';
+    const alertBox = this.add.graphics()
+        .setDepth(1)
+        .fillStyle(0xffffff)
+        .fillRect(200, 150, 400, 200)
+        .setAlpha(0.9);
     
-        // Add button to email item
-        const email1Button = this.add.graphics()
-      .fillStyle(0x00ff00)
-      .fillRoundedRect(555, 210, 60, 35, 15)
-      .setInteractive()
-      .on('pointerdown', function () {
-        const message = 'Congratulations! You have won a prize.';
-        this.dialogPlugin.prompt(message, ['OK']);
-      }, this);
+    const alertText = this.add.text(400, 200, 'Hello', {
+        fontFamily: 'Arial',
+        fontSize: 30,
+        color: '#000000'
+    }).setOrigin(0.5);
     
-    this.add.text(585, 227, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
+    this.time.delayedCall(5000, () => {
+        alertBox.destroy();
+        alertText.destroy();
+    });
+});
+
+this.add.text(585, 227, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
+      
     
     // Add the dialog plugin to the scene
     this.dialogPlugin = this.plugins.get('rexDialog');
     
     
-        const email2 = this.add.text(180, 260, '2. Urgent message from your bank', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+        const email2 = this.add.text(200, 260, '2. Urgent message from your bank', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
     
         // Add button to email item
         const email2Button = this.add.graphics()
@@ -364,7 +384,7 @@ class Game2 extends Phaser.Scene {
         this.add.text(585, 267, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
     
     
-        const email3 = this.add.text(180, 300, '3. Important security update', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+        const email3 = this.add.text(200, 300, '3. Important security update', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
     
         // Add button to email item
         const email3Button = this.add.graphics()
@@ -378,7 +398,7 @@ class Game2 extends Phaser.Scene {
         this.add.text(585, 306, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
     
     
-        const email4 = this.add.text(180, 340, '4. Your account has been compromised', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+        const email4 = this.add.text(200, 340, '4. Your account has been compromised', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
     
         // Add button to email item
         const email4Button = this.add.graphics()
@@ -394,18 +414,23 @@ class Game2 extends Phaser.Scene {
     
     
         // BOTAO DE VOLTAR -> vai para choose game
-        this.add.rectangle(400, 500, 200, 50, 0xffffff)
-        .setInteractive()
-        .on('pointerdown', this.loadChooseGameScene, this)
-        .setStrokeStyle(4, 0x000000);
-        this.add.text(400, 500, 'Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-        // BOTAO DE X -> vai para choose game
-        this.add.rectangle(700, 50, 50, 50, 0xff0000)
-                .setInteractive()
-                .on('pointerdown', this.loadChooseGameScene, this)
-                .setStrokeStyle(4, 0x000000);
+        this.add.circle(192, 487, 32, 0xffffff)
+            .setInteractive()
+            .on('pointerdown', this.loadChooseGameScene, this)
+            .setStrokeStyle(4, 0x000000)
+            .setAlpha(0.1);
+        // this.add.text(200, 475, ' ', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+
+
+
+        // // BOTAO DE X -> vai para choose game
+        // this.add.rectangle(700, 50, 50, 50, 0xff0000)
+        //         .setInteractive()
+        //         .on('pointerdown', this.loadChooseGameScene, this)
+        //         .setStrokeStyle(4, 0x000000);
             
-        this.add.text(700, 50, 'X', {fontFamily: 'Arial', fontSize: 24, color: '#ffffff'}).setOrigin(0.5);
+        // this.add.text(700, 50, 'X', {fontFamily: 'Arial', fontSize: 24, color: '#ffffff'}).setOrigin(0.5);
+
         }
         
         loadChooseGameScene() {
