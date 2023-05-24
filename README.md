@@ -11,8 +11,8 @@ Loading images via JavaScript module `import` is also supported, although not re
 
 ## Requirements | Requisitos
 
-* [Node.js](https://nodejs.org) is required to install dependencies and run scripts via `npm`.
-* [Web Pack](https://webpack.js.org/) is required to build the project.
+* [Node.js](https://nodejs.org) (16.16.0) is required to install dependencies and run scripts via `npm`.
+* [Web Pack 5](https://webpack.js.org/) is required to build the project.
 * [Phaser 3](https://phaser.io/phaser3) was used to develop the game.
 * [ES6](https://www.w3schools.com/js/js_es6.asp) is required to write the code.
 * [AWS](https://aws.amazon.com/pt/) was used to deploy the project. (S3)
