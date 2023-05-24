@@ -1,0 +1,10 @@
+runtime: nodejs16
+
+handlers:
+  - url: /(.*\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|otf|eot|json|html|map))$
+    static_files: dist/\1
+    upload: dist/.*\.(js|css|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|otf|eot|json|html|map)$
+
+  - url: /.*
+    static_files: dist/index.html
+    upload: dist/index.html
