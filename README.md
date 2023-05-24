@@ -1,5 +1,7 @@
 # Cyberecurity Arcade Games - Phaser 3
 
+* https://cen-jogo-phaser.nw.r.appspot.com/
+
 A Phaser 3 project template with ES6 support via [Babel 7](https://babeljs.io/) and [Webpack 4](https://webpack.js.org/)
 that includes hot-reloading for development and production-ready builds.
 
@@ -24,7 +26,7 @@ Loading images via JavaScript module `import` is also supported, although not re
 | `npm start`     | Build project and open web server running project                               |
 | `npm run build` | Builds code bundle with production settings (minification, uglification, etc..) |
 
-## Writing Code
+## Writing Code | Escrevendo o Código
 
 After cloning the repo, run `npm install` from your project directory. Then, you can start the local development server
 by running `npm start`.
@@ -32,7 +34,7 @@ by running `npm start`.
 After starting the development server with `npm start`, you can edit any files in the `src` folder and webpack will
 automatically recompile and reload your server (available at `http://localhost:8080` by default).
 
-## Customizing the Template
+## Customizing the Template | Customizando o Template
 
 ### Babel
 
@@ -48,13 +50,13 @@ total usage over "0.25%" but excludes IE11 and Opera Mini.
 ]
  ```
 
-### Webpack
+### Webpack 
 
 If you want to customize your build, such as adding a new webpack loader or plugin (i.e. for loading CSS or fonts), you
 can modify the `webpack/base.js` file for cross-project changes, or you can modify and/or create new configuration files
 and target them in specific npm tasks inside of `package.json'.
 
-## Deploying Code
+## Deploying Code | Deploy do Código
 
 After you run the `npm run build` command, your code will be built into a single bundle located at `dist/bundle.min.js`
 along with any other assets you project depended.
@@ -62,12 +64,12 @@ along with any other assets you project depended.
 If you put the contents of the `dist` folder in a publicly-accessible location (say something
 like `http://mycoolserver.com`), you should be able to open `http://mycoolserver.com/index.html` and play your game.
 
-### Deploying to App Engine (GCP)
+### Deploying to App Engine (GCP) | Deploy no App Engine (GCP)
 
 To deploy the project to App Engine, you need to have the [Google Cloud SDK](https://cloud.google.com/sdk/) installed
 and configured on your machine.
 
-## Updating the project on App Engine
+## Updating the project on App Engine | Atualizando o projeto no App Engine
 
 1. Login in your account:
 
@@ -96,11 +98,11 @@ gcloud app browse
 or
 https://cen-jogo-phaser.nw.r.appspot.com/
 
-## Contributing
+## Contributing | Contribuindo
 
 If you find any bugs or have a feature request, please open an issue with a description, steps to reproduce, and
 expected result.
 
-## License
+## License | Licença
 
 [General Public License v3.0](https://choosealicense.com/licenses/gpl-3.0/)
