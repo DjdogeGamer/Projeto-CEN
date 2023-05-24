@@ -1,4 +1,4 @@
-# Cyberecurity Arcade Games - Phaser 3
+# Cybersecurity Arcade Games - Phaser 3
 
 * https://cen-jogo-phaser.nw.r.appspot.com/
 
