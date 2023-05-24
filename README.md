@@ -11,6 +11,7 @@ Loading images via JavaScript module `import` is also supported, although not re
 
 ## Requirements | Requisitos
 
+* [NVM](https://github.com/nvm-sh/nvm) (0.38.0) is recommended to manage Node versions.
 * [Node.js](https://nodejs.org) (16.16.0) is required to install dependencies and run scripts via `npm`.
 * [Web Pack 5](https://webpack.js.org/) is required to build the project.
 * [Phaser 3](https://phaser.io/phaser3) was used to develop the game.
