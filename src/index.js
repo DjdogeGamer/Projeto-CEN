@@ -1,11 +1,15 @@
 import Phaser from 'phaser';
-import game2_1 from './assets/game2_1.png';
-import monitor from './assets/monitor.png';
+//import Phising_1 from './assets/Phising_1.png'; <- alterar imagens
+import monitor from '../assets/monitor.png';
 import axios from 'axios';
+
+import Board from './Board';
 
 class Menu extends Phaser.Scene {
     constructor() {
         super({key: 'Menu'});
+
+        
     }
 
     preload() {
@@ -15,22 +19,22 @@ class Menu extends Phaser.Scene {
 
     create() {
         // Menu background
-        this.menuBG = this.add.image(400, 300, 'background');
+        this.menuBG = this.add.image(475, 300, 'background');
 
         // Game title
-        this.add.rectangle(400, 200, 720, 100, 0x000000)
-        this.add.text(400, 200, '> Cybersecurity Arcade Games', {
+        this.add.rectangle(475, 200, 720, 100, 0x000000)
+        this.add.text(475, 200, '> Cybersecurity Arcade Games', {
             fontFamily: 'Arial',
             fontSize: 50,
             color: '#00ff00'
         }).setOrigin(0.5);
 
-        this.add.rectangle(400, 350, 200, 50, 0xffffff)
+        this.add.rectangle(475, 350, 200, 50, 0xffffff)
             .setInteractive()
             .on('pointerdown', this.loadChooseGameScene, this)
             .setStrokeStyle(4, 0x000000);
 
-        this.add.text(400, 350, 'Começar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+        this.add.text(475, 350, 'Começar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
 
     }
 
@@ -50,11 +54,11 @@ class ChooseGameScene extends Phaser.Scene {
 
     create() {
         // Menu background
-        this.add.image(400, 300, 'background');
+        this.add.image(475, 300, 'background');
 
         // Menu Title
-        this.add.rectangle(400, 200, 550, 100, 0x000000)
-        this.add.text(400, 200, '> Escolha um Jogo', {
+        this.add.rectangle(475, 200, 550, 100, 0x000000)
+        this.add.text(475, 200, '> Escolha um Jogo', {
             fontFamily: 'Arial',
             fontSize: 62,
             color: '#00ff00'
@@ -62,36 +66,36 @@ class ChooseGameScene extends Phaser.Scene {
 
 
         // QUIZ GAME
-        this.add.rectangle(200, 350, 100, 50, 0xffffff)
+        this.add.rectangle(275, 350, 100, 50, 0xffffff)
             .setInteractive()
             .on('pointerdown', this.loadQuizGameScene, this)
             .setStrokeStyle(4, 0x000000);
 
-        this.add.text(200, 350, 'Quiz', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-
-        // Game 3
-        this.add.rectangle(600, 350, 100, 50, 0xffffff)
-            .setInteractive()
-            .on('pointerdown', this.loadGame3, this)
-            .setStrokeStyle(4, 0x000000);
-
-        this.add.text(600, 350, 'Jogo 3', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+        this.add.text(275, 350, 'Quiz', {fontFamily: 'Arial', fontSize: 22, color: '#000000'}).setOrigin(0.5);
 
         // Game 2
-        this.add.rectangle(400, 350, 100, 50, 0xffffff)
+        this.add.rectangle(475, 350, 100, 50, 0xffffff)
             .setInteractive()
-            .on('pointerdown', this.loadGame2, this)
+            .on('pointerdown', this.loadPhising, this)
             .setStrokeStyle(4, 0x000000);
 
-        this.add.text(400, 350, 'Jogo 2', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+        this.add.text(475, 350, 'Phising', {fontFamily: 'Arial', fontSize: 22, color: '#000000'}).setOrigin(0.5);
+        // Game 3
+        this.add.rectangle(675, 350, 100, 50, 0xffffff)
+            .setInteractive()
+            .on('pointerdown', this.loadMemoryCard, this)
+            .setStrokeStyle(4, 0x000000);
+
+        this.add.text(675, 350, ' Cartas\nMemória', {fontFamily: 'Arial', fontSize: 19, color: '#000000'}).setOrigin(0.5);
+
 
         // Back button
-        this.add.rectangle(400, 500, 200, 50, 0xffffff)
+        this.add.rectangle(475, 500, 200, 50, 0xffffff)
             .setInteractive()
             .on('pointerdown', this.loadMenuScene, this)
             .setStrokeStyle(4, 0x000000);
 
-        this.add.text(400, 500, 'Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+        this.add.text(475, 500, 'Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
     }
 
     loadMenuScene() {
@@ -102,13 +106,15 @@ class ChooseGameScene extends Phaser.Scene {
         this.scene.start('QuizGame');
     }
 
-    loadGame2() {
-        this.scene.start('Game2');
+    loadPhising() {
+        this.scene.start('Phising');
     }
 
-    loadGame3() {
-        this.scene.start('Game3');
+    loadMemoryCard() {
+        this.scene.add('MemoryCard', Board, true);
     }
+
+
 }
 
 class QuizGame extends Phaser.Scene {
@@ -161,9 +167,9 @@ class QuizGame extends Phaser.Scene {
     create() {
         // Background
         this.cameras.main.setBackgroundColor('#404080');
-        this.add.image(400, 300, 'quiz_bg');
+        this.add.image(475, 300, 'quiz_bg');
         // Quiz game title
-        this.add.text(400, 30, 'Cybersecurity Quiz', { fontFamily: 'Arial', fontSize: 40, color: '#ffffff' }).setOrigin(0.5);
+        this.add.text(475, 30, 'Cybersecurity Quiz', { fontFamily: 'Arial', fontSize: 40, color: '#ffffff' }).setOrigin(0.5);
         this.showNextQuestion();
     }
 
@@ -171,9 +177,9 @@ class QuizGame extends Phaser.Scene {
         if (this.currentQuestion >= this.questions.length) {
             // Exibe a pontuação final e reinicia o jogo
 
-            this.add.rectangle(400, 150, 500, 90, 0x000000).setOrigin(0.5);
+            this.add.rectangle(475, 150, 500, 90, 0x000000).setOrigin(0.5);
             // impede que o usuário clique em outra resposta
-            questionBox = this.add.text(400, 150, "FIM DE JOGO! Pontuação final: " + this.score, {
+            questionBox = this.add.text(475, 150, "FIM DE JOGO! Pontuação final: " + this.score, {
                 fontFamily: 'Arial',
                 fontSize: 18,
                 color: '#ffffff',
@@ -190,22 +196,22 @@ class QuizGame extends Phaser.Scene {
         } else {
             // Exibe a pergunta e as opções
             // Exibe timer
-            this.add.rectangle(400, 80, 50, 30, 0x000000).setStrokeStyle(4, 0xffffff);
-            this.timerText = this.add.text(400, 80, '10', { fontFamily: 'Arial', fontSize: 24, color: '#ff0000' }).setOrigin(0.5);
+            this.add.rectangle(475, 80, 50, 30, 0x000000).setStrokeStyle(4, 0xffffff);
+            this.timerText = this.add.text(475, 80, '10', { fontFamily: 'Arial', fontSize: 24, color: '#ff0000' }).setOrigin(0.5);
 
             // Inicia o timer
             this.timer = this.time.addEvent({ delay: 16000, callback: this.goToNextQuestion, callbackScope: this });
 
-            this.add.rectangle(400, 150, 550, 100, 0x000000).setStrokeStyle(4, 0xffffff);
+            this.add.rectangle(475, 150, 550, 100, 0x000000).setStrokeStyle(4, 0xffffff);
 
-            var questionBox = this.add.text(400, 150, this.questions[this.currentQuestion].question, {
+            var questionBox = this.add.text(475, 150, this.questions[this.currentQuestion].question, {
                 fontFamily: 'Arial',
                 fontSize: 18,
                 color: '#ffffff',
                 wordWrap: {width: 500, useAdvancedWrap: true}
             }).setOrigin(0.5);
 
-            var Answer0 = this.add.rectangle(400, 275, 510, 65, 0xffffff)
+            var Answer0 = this.add.rectangle(475, 275, 510, 65, 0xffffff)
                 .setInteractive()
                 .on('pointerdown', () => {
                     Answer0.name = "0";
@@ -244,14 +250,14 @@ class QuizGame extends Phaser.Scene {
                 }, this)
                 .setStrokeStyle(4, 0x000000);
 
-            this.add.text(400, 275, this.questions[this.currentQuestion].choices[0], {
+            this.add.text(475, 275, this.questions[this.currentQuestion].choices[0], {
                 fontFamily: 'Arial',
                 fontSize: 17,
                 color: '#000000',
                 wordWrap: {width: 500, height: 50, useAdvancedWrap: true}
             }).setOrigin(0.5);
 
-            var Answer1 = this.add.rectangle(400, 375, 510, 65, 0xffffff)
+            var Answer1 = this.add.rectangle(475, 375, 510, 65, 0xffffff)
                 .setInteractive()
                 .on('pointerdown', () => {
                     Answer1.name = "1";
@@ -288,14 +294,14 @@ class QuizGame extends Phaser.Scene {
                 }, this)
                 .setStrokeStyle(4, 0x000000);
 
-            this.add.text(400, 375, this.questions[this.currentQuestion].choices[1], {
+            this.add.text(475, 375, this.questions[this.currentQuestion].choices[1], {
                 fontFamily: 'Arial',
                 fontSize: 17,
                 color: '#000000',
                 wordWrap: {width: 500, height: 50, useAdvancedWrap: true}
             }).setOrigin(0.5);
 
-            var Answer2 = this.add.rectangle(400, 475, 510, 65, 0xffffff)
+            var Answer2 = this.add.rectangle(475, 475, 510, 65, 0xffffff)
                 .setInteractive()
                 .on('pointerdown', () => {
                     Answer2.name = "2";
@@ -332,7 +338,7 @@ class QuizGame extends Phaser.Scene {
                 }, this)
                 .setStrokeStyle(4, 0x000000);
 
-            this.add.text(400, 475, this.questions[this.currentQuestion].choices[2], {
+            this.add.text(475, 475, this.questions[this.currentQuestion].choices[2], {
                 fontFamily: 'Arial',
                 fontSize: 17,
                 color: '#000000',
@@ -354,9 +360,9 @@ class QuizGame extends Phaser.Scene {
 
 }
 
-class Game2 extends Phaser.Scene {
+class Phising extends Phaser.Scene {
     constructor() {
-        super({key: 'Game2'});
+        super({key: 'Phising'});
     }
 
     preload() {
@@ -368,21 +374,21 @@ class Game2 extends Phaser.Scene {
     create() {
         
         // Nível 1 background
-        this.add.image(400, 300, 'monitor');
+        this.add.image(475, 300, 'monitor');
     
         // Email list background
-        this.add.rectangle(390, 253, 395, 250, 0xfddddd);
+        this.add.rectangle(365, 253, 395, 250, 0xfddddd);
         
         // Email inbox title
-        this.add.text(400, 150, 'Email inbox', {fontFamily: 'Arial', fontSize: 32, color: '#000000'}).setOrigin(0.5);
+        this.add.text(475, 150, 'Email inbox', {fontFamily: 'Arial', fontSize: 32, color: '#000000'}).setOrigin(0.5);
     
         // Email list items
-        const email1 = this.add.text(200, 220, '1. You have won a prize!', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+        const email1 = this.add.text(275, 220, '1. You have won a prize!', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
 
 // Add button to email item
 const email1Button = this.add.graphics()
     .fillStyle(0x00ff00)
-    .fillRoundedRect(555, 210, 60, 35, 15)
+    .fillRoundedRect(630, 210, 60, 35, 15)
     .setInteractive();
 
 email1Button.on('pointerdown', () => {
@@ -390,10 +396,10 @@ email1Button.on('pointerdown', () => {
     const alertBox = this.add.graphics()
         .setDepth(1)
         .fillStyle(0xffffff)
-        .fillRect(200, 150, 400, 200)
+        .fillRect(200, 150, 475, 200)
         .setAlpha(0.9);
     
-    const alertText = this.add.text(400, 200, 'Hello', {
+    const alertText = this.add.text(475, 200, 'Hello', {
         fontFamily: 'Arial',
         fontSize: 30,
         color: '#000000'
@@ -421,7 +427,7 @@ this.add.text(585, 227, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#fff
         .setInteractive()
         .on('pointerdown', function () {
             const message = 'Your bank took your money, have a nice day!';
-            this.add.text(400, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+            this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
         }, this);
         this.add.text(585, 267, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
     
@@ -435,7 +441,7 @@ this.add.text(585, 227, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#fff
         .setInteractive()
         .on('pointerdown', function () {
             const message = 'Your bank took your money, have a nice day!';
-            this.add.text(400, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+            this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
         }, this);
         this.add.text(585, 306, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
     
@@ -449,7 +455,7 @@ this.add.text(585, 227, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#fff
         .setInteractive()
         .on('pointerdown', function () {
             const message = 'Your bank took your money, have a nice day!';
-            this.add.text(400, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+            this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
         }, this);
         this.add.text(585, 346, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
     
@@ -481,15 +487,15 @@ this.add.text(585, 227, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#fff
     
         showPopup(title, message) {
             // Create the popup background
-            const popupBackground = this.add.rectangle(400, 300, 500, 200, 0xffffff);
+            const popupBackground = this.add.rectangle(475, 300, 500, 200, 0xffffff);
             popupBackground.setStrokeStyle(4, 0x000000);
         
             // Add the popup title and message
-            this.add.text(400, 250, title, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-            this.add.text(400, 300, message, {fontFamily: 'Arial', fontSize: 20, color: '#000000'}).setOrigin(0.5);
+            this.add.text(475, 250, title, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+            this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 20, color: '#000000'}).setOrigin(0.5);
         
             // Add the close button
-            const closeButton = this.add.rectangle(400, 350, 100, 50, 0xff0000)
+            const closeButton = this.add.rectangle(475, 350, 100, 50, 0xff0000)
                 .setInteractive()
                 .on('pointerdown', function () {
                     // Remove the popup from the scene
@@ -498,50 +504,38 @@ this.add.text(585, 227, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#fff
                     popupMessage.destroy();
                     closeButton.destroy();
                 }, this);
-            this.add.text(400, 350, 'Close', {fontFamily: 'Arial', fontSize: 20, color: '#ffffff'}).setOrigin(0.5);
+            this.add.text(475, 350, 'Close', {fontFamily: 'Arial', fontSize: 20, color: '#ffffff'}).setOrigin(0.5);
         }
 }
 
-class Game3 extends Phaser.Scene {
+class MemoryCard extends Phaser.Game {
+
     constructor() {
-        super({key: 'Game3'});
+        
+    //   var config = {
+    //     type: Phaser.AUTO,
+    //     width: 950,
+    //     height: 600,
+    //     physics: {
+    //       default: 'arcade',
+    //       arcade: {
+    //         gravity: { y: 200 }
+    //       }
+    //     },
+    //   };
+      super(config);
+      this.scene.add('MemoryCard', Board, true);
     }
-
-    preload() {
-
-    }
-
-    create() {
-        // Menu background
-        this.add.image(400, 300, 'background');
-
-        // Menu Title
-        this.add.rectangle(400, 200, 550, 100, 0x000000)
-        this.add.text(400, 200, 'Jogo 3 Exemplo', {
-            fontFamily: 'Arial',
-            fontSize: 64,
-            color: '#ffffff'
-        }).setOrigin(0.5);
-
-        this.add.rectangle(400, 500, 200, 50, 0xffffff)
-            .setInteractive()
-            .on('pointerdown', this.loadChooseGameScene, this)
-            .setStrokeStyle(4, 0x000000);
-
-        this.add.text(400, 500, 'Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-    }
-
-    loadChooseGameScene() {
-        this.scene.start('ChooseGameScene');
-    }
-}
+  }
+  
+  //window.game = new MemoryCard();
 
 const config = {
     type: Phaser.AUTO,
     parent: 'phaser-example',
-    width: 800,
+    width: 950,
     height: 600,
-    scene: [Menu, ChooseGameScene, QuizGame, Game2, Game3],
+    scene: [Menu, ChooseGameScene, QuizGame, Phising],
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH

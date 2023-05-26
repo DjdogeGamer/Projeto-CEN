@@ -74,7 +74,7 @@ export default class GameScene {
     };
   
     if (!this.score) {
-      this.score = this.add.text(0, 425, '', style);
+      this.score = this.add.text(0, 400, '', style);
     }
   
     const efficiency = this.attempts
@@ -227,6 +227,18 @@ export default class GameScene {
       this.cards.push(new Card( {key, gameScene: this, ...posA, handler: this._cardClickHandler.bind(this)} ));
       this.cards.push(new Card( {key, gameScene: this, ...posB, handler: this._cardClickHandler.bind(this)} ));
     }
-    
+
+
+  this.add.rectangle(815, 544, 200, 50, 0xffffff)
+      .setInteractive()
+      .on('pointerdown', this.loadChooseGameScene, this)
+      .setStrokeStyle(4, 0x000000);
+
+  this.add.text(815, 544, '↩ Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
   }
+
+  loadChooseGameScene() {
+      this.scene.start('ChooseGameScene');
+  }
+    
 }
