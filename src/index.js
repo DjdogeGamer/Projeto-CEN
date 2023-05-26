@@ -1,7 +1,7 @@
 import Phaser from 'phaser';
-import bgImg from './assets/menu_bg.jpg';
 import game2_1 from './assets/game2_1.png';
 import monitor from './assets/monitor.png';
+import axios from 'axios';
 
 class Menu extends Phaser.Scene {
     constructor() {
@@ -9,19 +9,20 @@ class Menu extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('background', bgImg);
+        // load from API endpoint
+        this.load.image('background', 'https://cen-api.nw.r.appspot.com/asset?fileName=bg.jpg');
     }
 
     create() {
         // Menu background
-        this.add.image(400, 300, 'background');
+        this.menuBG = this.add.image(400, 300, 'background');
 
         // Game title
         this.add.rectangle(400, 200, 720, 100, 0x000000)
-        this.add.text(400, 200, 'Jogos de Cibersegurança', {
+        this.add.text(400, 200, '> Cybersecurity Arcade Games', {
             fontFamily: 'Arial',
-            fontSize: 64,
-            color: '#ffffff'
+            fontSize: 50,
+            color: '#00ff00'
         }).setOrigin(0.5);
 
         this.add.rectangle(400, 350, 200, 50, 0xffffff)
@@ -44,7 +45,7 @@ class ChooseGameScene extends Phaser.Scene {
     }
 
     preload() {
-
+        this.load.image('background', 'https://cen-api.nw.r.appspot.com/asset?fileName=bg.jpg');
     }
 
     create() {
@@ -53,10 +54,10 @@ class ChooseGameScene extends Phaser.Scene {
 
         // Menu Title
         this.add.rectangle(400, 200, 550, 100, 0x000000)
-        this.add.text(400, 200, 'Escolha um Jogo', {
+        this.add.text(400, 200, '> Escolha um Jogo', {
             fontFamily: 'Arial',
-            fontSize: 64,
-            color: '#ffffff'
+            fontSize: 62,
+            color: '#00ff00'
         }).setOrigin(0.5);
 
 
@@ -114,6 +115,8 @@ class QuizGame extends Phaser.Scene {
     constructor() {
         super({key: "QuizGame"});
         // Definição de variáveis
+        this.timerText;
+        this.timer;
         this.score = 0;
         this.currentQuestion = 0;
         this.questions = [
@@ -151,13 +154,23 @@ class QuizGame extends Phaser.Scene {
 
     }
 
+    preload() {
+        this.load.image('quiz_bg', 'https://cen-api.nw.r.appspot.com/asset?fileName=quiz_bg.jpg');
+    }
+
     create() {
+        // Background
+        this.cameras.main.setBackgroundColor('#404080');
+        this.add.image(400, 300, 'quiz_bg');
+        // Quiz game title
+        this.add.text(400, 30, 'Cybersecurity Quiz', { fontFamily: 'Arial', fontSize: 40, color: '#ffffff' }).setOrigin(0.5);
         this.showNextQuestion();
     }
 
     showNextQuestion() {
         if (this.currentQuestion >= this.questions.length) {
             // Exibe a pontuação final e reinicia o jogo
+
             this.add.rectangle(400, 150, 500, 90, 0x000000).setOrigin(0.5);
             // impede que o usuário clique em outra resposta
             questionBox = this.add.text(400, 150, "FIM DE JOGO! Pontuação final: " + this.score, {
@@ -167,14 +180,24 @@ class QuizGame extends Phaser.Scene {
                 wordWrap: {width: 500, useAdvancedWrap: true}
             }).setOrigin(0.5);
 
+            this.timer.paused = true;
+
             setTimeout(() => {
                 this.score = 0;
                 this.currentQuestion = 0;
                 this.scene.start('ChooseGameScene');
             }, 3000);
         } else {
-            this.add.image(400, 300, 'background');
+            // Exibe a pergunta e as opções
+            // Exibe timer
+            this.add.rectangle(400, 80, 50, 30, 0x000000).setStrokeStyle(4, 0xffffff);
+            this.timerText = this.add.text(400, 80, '10', { fontFamily: 'Arial', fontSize: 24, color: '#ff0000' }).setOrigin(0.5);
+
+            // Inicia o timer
+            this.timer = this.time.addEvent({ delay: 16000, callback: this.goToNextQuestion, callbackScope: this });
+
             this.add.rectangle(400, 150, 550, 100, 0x000000).setStrokeStyle(4, 0xffffff);
+
             var questionBox = this.add.text(400, 150, this.questions[this.currentQuestion].question, {
                 fontFamily: 'Arial',
                 fontSize: 18,
@@ -192,6 +215,7 @@ class QuizGame extends Phaser.Scene {
                         questionBox.setText("Resposta correta!");
                         // Se a resposta estiver correta, adiciona pontos e passa para a próxima pergunta
                         this.score += 10;
+                        this.timer.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
@@ -205,6 +229,8 @@ class QuizGame extends Phaser.Scene {
                         console.log("Resposta errada!");
                         // Se a resposta estiver errada, mostra a explicação e passa para a próxima pergunta
                         questionBox.setText(this.questions[this.currentQuestion].explanation);
+                        // Pausa o timer
+                        this.timer.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
@@ -233,6 +259,7 @@ class QuizGame extends Phaser.Scene {
                         questionBox.setText("Resposta correta!");
                         // Se a resposta estiver correta, adiciona pontos e passa para a próxima pergunta
                         this.score += 10;
+                        this.timer.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
@@ -246,6 +273,8 @@ class QuizGame extends Phaser.Scene {
                         console.log("Resposta errada!");
                         // Se a resposta estiver errada, mostra a explicação e passa para a próxima pergunta
                         questionBox.setText(this.questions[this.currentQuestion].explanation);
+                        // Tira o timer
+                        this.time.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
@@ -274,6 +303,7 @@ class QuizGame extends Phaser.Scene {
                         questionBox.setText("Resposta correta!");
                         // Se a resposta estiver correta, adiciona pontos e passa para a próxima pergunta
                         this.score += 10;
+                        this.timer.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
@@ -287,6 +317,8 @@ class QuizGame extends Phaser.Scene {
                         console.log("Resposta errada!");
                         // Se a resposta estiver errada, mostra a explicação e passa para a próxima pergunta
                         questionBox.setText(this.questions[this.currentQuestion].explanation);
+                        // Pauser o timer
+                        this.timer.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
@@ -308,6 +340,16 @@ class QuizGame extends Phaser.Scene {
             }).setOrigin(0.5);
         }
 
+    }
+
+    // go to the next question after timer runs out
+    goToNextQuestion() {
+        this.currentQuestion++;
+        this.showNextQuestion();
+    }
+
+    update() {
+        this.timerText.setText(Math.floor((16000 - this.timer.getElapsed()) / 1000));
     }
 
 }
