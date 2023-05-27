@@ -19,7 +19,7 @@ export default class GameScene {
     this._loadCards();
     this._newRound();
     // Load the background image
-    this.load.image('background', '../assets/background/background.jpg');
+    this.load.image('board_background', 'https://cen-api.nw.r.appspot.com/asset?fileName=board_950x600.jpg');
 
     // Load the card images using the imageUtils module
     Object.keys(images).map((name) => {
@@ -124,11 +124,12 @@ export default class GameScene {
       font: 'bold 16px Arial',
       fill: '#fff',
       boundsAlignH: 'left',
-      boundsAlignV: 'bottom'
+      boundsAlignV: 'bottom',
+      wordWrap: { width: 930 }
     };
   
     const scoreStyle = {
-      font: 'bold 12px Arial',
+      font: 'bold 18px Arial',
       fill: '#fff',
       boundsAlignH: 'right',
       boundsAlignV: 'bottom'
@@ -182,7 +183,7 @@ export default class GameScene {
   {
 
     // Load the background image
-    const backgroundImage = this.add.image(0, 0, 'background');
+    const backgroundImage = this.add.image(0, 0, 'board_background');
     backgroundImage.setOrigin(0, 0);
     backgroundImage.setScale(1.2);
 
@@ -228,7 +229,8 @@ export default class GameScene {
       this.cards.push(new Card( {key, gameScene: this, ...posB, handler: this._cardClickHandler.bind(this)} ));
     }
 
-
+  this.add.rectangle(475, 500, 945, 200, 0x000000)
+        .setStrokeStyle(4, 0xffffff);
   this.add.rectangle(815, 544, 200, 50, 0xffffff)
       .setInteractive()
       .on('pointerdown', this.loadChooseGameScene, this)

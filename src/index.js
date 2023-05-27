@@ -8,8 +8,6 @@ import Board from './Board';
 class Menu extends Phaser.Scene {
     constructor() {
         super({key: 'Menu'});
-
-        
     }
 
     preload() {
@@ -86,7 +84,11 @@ class ChooseGameScene extends Phaser.Scene {
             .on('pointerdown', this.loadMemoryCard, this)
             .setStrokeStyle(4, 0x000000);
 
-        this.add.text(675, 350, ' Cartas\nMemória', {fontFamily: 'Arial', fontSize: 19, color: '#000000'}).setOrigin(0.5);
+        this.add.text(675, 350, ' Cartas\nMemória', {
+            fontFamily: 'Arial',
+            fontSize: 19,
+            color: '#000000'
+        }).setOrigin(0.5);
 
 
         // Back button
@@ -169,7 +171,11 @@ class QuizGame extends Phaser.Scene {
         this.cameras.main.setBackgroundColor('#404080');
         this.add.image(475, 300, 'quiz_bg');
         // Quiz game title
-        this.add.text(475, 30, 'Cybersecurity Quiz', { fontFamily: 'Arial', fontSize: 40, color: '#ffffff' }).setOrigin(0.5);
+        this.add.text(475, 30, 'Cybersecurity Quiz', {
+            fontFamily: 'Arial',
+            fontSize: 40,
+            color: '#ffffff'
+        }).setOrigin(0.5);
         this.showNextQuestion();
     }
 
@@ -197,10 +203,14 @@ class QuizGame extends Phaser.Scene {
             // Exibe a pergunta e as opções
             // Exibe timer
             this.add.rectangle(475, 80, 50, 30, 0x000000).setStrokeStyle(4, 0xffffff);
-            this.timerText = this.add.text(475, 80, '10', { fontFamily: 'Arial', fontSize: 24, color: '#ff0000' }).setOrigin(0.5);
+            this.timerText = this.add.text(475, 80, '10', {
+                fontFamily: 'Arial',
+                fontSize: 24,
+                color: '#ff0000'
+            }).setOrigin(0.5);
 
             // Inicia o timer
-            this.timer = this.time.addEvent({ delay: 16000, callback: this.goToNextQuestion, callbackScope: this });
+            this.timer = this.time.addEvent({delay: 16000, callback: this.goToNextQuestion, callbackScope: this});
 
             this.add.rectangle(475, 150, 550, 100, 0x000000).setStrokeStyle(4, 0xffffff);
 
@@ -372,95 +382,110 @@ class Phising extends Phaser.Scene {
     }
 
     create() {
-        
+
         // Nível 1 background
         this.add.image(475, 300, 'monitor');
-    
+
         // Email list background
         this.add.rectangle(365, 253, 395, 250, 0xfddddd);
-        
+
         // Email inbox title
         this.add.text(475, 150, 'Email inbox', {fontFamily: 'Arial', fontSize: 32, color: '#000000'}).setOrigin(0.5);
-    
+
         // Email list items
-        const email1 = this.add.text(275, 220, '1. You have won a prize!', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
+        const email1 = this.add.text(275, 220, '1. You have won a prize!', {
+            fontFamily: 'Arial',
+            fontSize: 20,
+            color: '#000000'
+        });
 
 // Add button to email item
-const email1Button = this.add.graphics()
-    .fillStyle(0x00ff00)
-    .fillRoundedRect(630, 210, 60, 35, 15)
-    .setInteractive();
+        const email1Button = this.add.graphics()
+            .fillStyle(0x00ff00)
+            .fillRoundedRect(630, 210, 60, 35, 15)
+            .setInteractive();
 
-email1Button.on('pointerdown', () => {
-    const message = 'Congratulations! You have won a prize.';
-    const alertBox = this.add.graphics()
-        .setDepth(1)
-        .fillStyle(0xffffff)
-        .fillRect(200, 150, 475, 200)
-        .setAlpha(0.9);
-    
-    const alertText = this.add.text(475, 200, 'Hello', {
-        fontFamily: 'Arial',
-        fontSize: 30,
-        color: '#000000'
-    }).setOrigin(0.5);
-    
-    this.time.delayedCall(5000, () => {
-        alertBox.destroy();
-        alertText.destroy();
-    });
-});
+        email1Button.on('pointerdown', () => {
+            const message = 'Congratulations! You have won a prize.';
+            const alertBox = this.add.graphics()
+                .setDepth(1)
+                .fillStyle(0xffffff)
+                .fillRect(200, 150, 475, 200)
+                .setAlpha(0.9);
 
-this.add.text(585, 227, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
-      
-    
-    // Add the dialog plugin to the scene
-    this.dialogPlugin = this.plugins.get('rexDialog');
-    
-    
-        const email2 = this.add.text(200, 260, '2. Urgent message from your bank', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
-    
+            const alertText = this.add.text(475, 200, 'Hello', {
+                fontFamily: 'Arial',
+                fontSize: 30,
+                color: '#000000'
+            }).setOrigin(0.5);
+
+            this.time.delayedCall(5000, () => {
+                alertBox.destroy();
+                alertText.destroy();
+            });
+        });
+
+        this.add.text(585, 227, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
+
+
+        // Add the dialog plugin to the scene
+        this.dialogPlugin = this.plugins.get('rexDialog');
+
+
+        const email2 = this.add.text(200, 260, '2. Urgent message from your bank', {
+            fontFamily: 'Arial',
+            fontSize: 20,
+            color: '#000000'
+        });
+
         // Add button to email item
         const email2Button = this.add.graphics()
-        .fillStyle(0x00ff00)
-        .fillRoundedRect(555, 250, 60, 35, 15)
-        .setInteractive()
-        .on('pointerdown', function () {
-            const message = 'Your bank took your money, have a nice day!';
-            this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-        }, this);
+            .fillStyle(0x00ff00)
+            .fillRoundedRect(555, 250, 60, 35, 15)
+            .setInteractive()
+            .on('pointerdown', function () {
+                const message = 'Your bank took your money, have a nice day!';
+                this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+            }, this);
         this.add.text(585, 267, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
-    
-    
-        const email3 = this.add.text(200, 300, '3. Important security update', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
-    
+
+
+        const email3 = this.add.text(200, 300, '3. Important security update', {
+            fontFamily: 'Arial',
+            fontSize: 20,
+            color: '#000000'
+        });
+
         // Add button to email item
         const email3Button = this.add.graphics()
-        .fillStyle(0x00ff00)
-        .fillRoundedRect(555, 290, 60, 35, 15)
-        .setInteractive()
-        .on('pointerdown', function () {
-            const message = 'Your bank took your money, have a nice day!';
-            this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-        }, this);
+            .fillStyle(0x00ff00)
+            .fillRoundedRect(555, 290, 60, 35, 15)
+            .setInteractive()
+            .on('pointerdown', function () {
+                const message = 'Your bank took your money, have a nice day!';
+                this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+            }, this);
         this.add.text(585, 306, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
-    
-    
-        const email4 = this.add.text(200, 340, '4. Your account has been compromised', {fontFamily: 'Arial', fontSize: 20, color: '#000000'});
-    
+
+
+        const email4 = this.add.text(200, 340, '4. Your account has been compromised', {
+            fontFamily: 'Arial',
+            fontSize: 20,
+            color: '#000000'
+        });
+
         // Add button to email item
         const email4Button = this.add.graphics()
-        .fillStyle(0x00ff00)
-        .fillRoundedRect(555, 330, 60, 35, 15)
-        .setInteractive()
-        .on('pointerdown', function () {
-            const message = 'Your bank took your money, have a nice day!';
-            this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-        }, this);
+            .fillStyle(0x00ff00)
+            .fillRoundedRect(555, 330, 60, 35, 15)
+            .setInteractive()
+            .on('pointerdown', function () {
+                const message = 'Your bank took your money, have a nice day!';
+                this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+            }, this);
         this.add.text(585, 346, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
-    
-    
-    
+
+
         // BOTAO DE VOLTAR -> vai para choose game
         this.add.circle(192, 487, 32, 0xffffff)
             .setInteractive()
@@ -470,65 +495,64 @@ this.add.text(585, 227, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#fff
         // this.add.text(200, 475, ' ', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
 
 
-
         // // BOTAO DE X -> vai para choose game
         // this.add.rectangle(700, 50, 50, 50, 0xff0000)
         //         .setInteractive()
         //         .on('pointerdown', this.loadChooseGameScene, this)
         //         .setStrokeStyle(4, 0x000000);
-            
+
         // this.add.text(700, 50, 'X', {fontFamily: 'Arial', fontSize: 24, color: '#ffffff'}).setOrigin(0.5);
 
-        }
-        
-        loadChooseGameScene() {
-            this.scene.start('ChooseGameScene');
-        }
-    
-        showPopup(title, message) {
-            // Create the popup background
-            const popupBackground = this.add.rectangle(475, 300, 500, 200, 0xffffff);
-            popupBackground.setStrokeStyle(4, 0x000000);
-        
-            // Add the popup title and message
-            this.add.text(475, 250, title, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-            this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 20, color: '#000000'}).setOrigin(0.5);
-        
-            // Add the close button
-            const closeButton = this.add.rectangle(475, 350, 100, 50, 0xff0000)
-                .setInteractive()
-                .on('pointerdown', function () {
-                    // Remove the popup from the scene
-                    popupBackground.destroy();
-                    popupTitle.destroy();
-                    popupMessage.destroy();
-                    closeButton.destroy();
-                }, this);
-            this.add.text(475, 350, 'Close', {fontFamily: 'Arial', fontSize: 20, color: '#ffffff'}).setOrigin(0.5);
-        }
+    }
+
+    loadChooseGameScene() {
+        this.scene.start('ChooseGameScene');
+    }
+
+    showPopup(title, message) {
+        // Create the popup background
+        const popupBackground = this.add.rectangle(475, 300, 500, 200, 0xffffff);
+        popupBackground.setStrokeStyle(4, 0x000000);
+
+        // Add the popup title and message
+        this.add.text(475, 250, title, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+        this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 20, color: '#000000'}).setOrigin(0.5);
+
+        // Add the close button
+        const closeButton = this.add.rectangle(475, 350, 100, 50, 0xff0000)
+            .setInteractive()
+            .on('pointerdown', function () {
+                // Remove the popup from the scene
+                popupBackground.destroy();
+                popupTitle.destroy();
+                popupMessage.destroy();
+                closeButton.destroy();
+            }, this);
+        this.add.text(475, 350, 'Close', {fontFamily: 'Arial', fontSize: 20, color: '#ffffff'}).setOrigin(0.5);
+    }
 }
 
 class MemoryCard extends Phaser.Game {
 
     constructor() {
-        
-    //   var config = {
-    //     type: Phaser.AUTO,
-    //     width: 950,
-    //     height: 600,
-    //     physics: {
-    //       default: 'arcade',
-    //       arcade: {
-    //         gravity: { y: 200 }
-    //       }
-    //     },
-    //   };
-      super(config);
-      this.scene.add('MemoryCard', Board, true);
+
+        //   var config = {
+        //     type: Phaser.AUTO,
+        //     width: 950,
+        //     height: 600,
+        //     physics: {
+        //       default: 'arcade',
+        //       arcade: {
+        //         gravity: { y: 200 }
+        //       }
+        //     },
+        //   };
+        super(config);
+        this.scene.add('MemoryCard', Board, true);
     }
-  }
-  
-  //window.game = new MemoryCard();
+}
+
+//window.game = new MemoryCard();
 
 const config = {
     type: Phaser.AUTO,
