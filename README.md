@@ -9,6 +9,12 @@ This has been updated for Phaser 3.50.0 version and above.
 
 Loading images via JavaScript module `import` is also supported, although not recommended.
 
+## API Architecture | Arquitetura da API
+
+<div align="center">
+  <img src="https://github.com/DjdogeGamer/Projeto-CEN/assets/69666481/fb9b7a9a-9b67-40ef-a841-41b47c4670da">
+</div>
+
 ## Requirements | Requisitos
 
 * [NVM](https://github.com/nvm-sh/nvm) (0.38.0) is recommended to manage Node versions.

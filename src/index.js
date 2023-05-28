@@ -1,6 +1,4 @@
 import Phaser from 'phaser';
-//import Phising_1 from './assets/Phising_1.png'; <- alterar imagens
-import monitor from '../assets/monitor.png';
 import axios from 'axios';
 
 import Board from './Board';
@@ -122,7 +120,7 @@ class ChooseGameScene extends Phaser.Scene {
 class QuizGame extends Phaser.Scene {
     constructor() {
         super({key: "QuizGame"});
-        // Definição de variáveis
+
         this.timerText;
         this.timer;
         this.score = 0;
@@ -151,12 +149,32 @@ class QuizGame extends Phaser.Scene {
             {
                 question: "O que é um firewall?",
                 choices: [
-                    "Um software ou hardware que monitora e controla o tráfego de rede, permitindo ou bloqueando o acesso com base em um conjunto de regras de segurança",
                     "Um dispositivo que verifica se um usuário é quem ele diz ser, geralmente por meio de um código enviado para o seu celular",
+                    "Um software ou hardware que monitora e controla o tráfego de rede, permitindo ou bloqueando o acesso com base em um conjunto de regras de segurança",
                     "Um tipo de malware que bloquea todas as portas de rede do computador impedindo que o usuário acesse a Internet"
                 ],
-                correctAnswer: 0,
+                correctAnswer: 1,
                 explanation: "Um firewall é um software ou hardware que monitora e controla o tráfego de rede, permitindo ou bloqueando o acesso com base em um conjunto de regras de segurança."
+            },
+            {
+                question: "O que é um ransomware?",
+                choices: [
+                    "Um ataque que consiste em enviar um e-mail falso, com o objetivo de enganar o destinatário e fazê-lo revelar informações confidenciais",
+                    "Um dispositivo que verifica se um usuário é quem ele diz ser, geralmente por meio de um código enviado para o seu celular",
+                    "Um tipo de vírus que criptografa os arquivos do usuário e exige o pagamento de um resgate para liberá-los"
+                ],
+                correctAnswer: 2,
+                explanation: "Ransomware é um tipo de malware que criptografa os arquivos do usuário e exige o pagamento de um resgate para liberá-los."
+            },
+            {
+                question: "O que é um antivírus?",
+                choices: [
+                    "Um software que verifica se um usuário é quem ele diz ser, geralmente por meio de um código enviado para o seu celular",
+                    "Um software que monitora e controla o tráfego de rede, permitindo ou bloqueando o acesso com base em um conjunto de regras de segurança",
+                    "Um software que detecta e remove vírus e outros tipos de malware"
+                ],
+                correctAnswer: 2,
+                explanation: "Um antivírus é um software que detecta e remove vírus e outros tipos de malware."
             }
         ];
 
@@ -176,12 +194,27 @@ class QuizGame extends Phaser.Scene {
             fontSize: 40,
             color: '#ffffff'
         }).setOrigin(0.5);
+
+        // back button
+        this.add.rectangle(120, 525, 100, 50, 0xffffff)
+            .setInteractive()
+            .on('pointerdown', this.loadMenuScene, this)
+            .setStrokeStyle(4, 0x000000);
+
+        this.add.text(120, 525, 'Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+
+        this.timer = this.time.addEvent({ delay: 16000, callback: this.goToNextQuestion, callbackScope: this });
         this.showNextQuestion();
     }
 
     showNextQuestion() {
+        // Reinicia o timer
+        this.timer.remove();
+        this.timer = this.time.addEvent({ delay: 16000, callback: this.goToNextQuestion, callbackScope: this });
+        this.timer.paused = false;
         if (this.currentQuestion >= this.questions.length) {
             // Exibe a pontuação final e reinicia o jogo
+            this.timer.remove();
 
             this.add.rectangle(475, 150, 500, 90, 0x000000).setOrigin(0.5);
             // impede que o usuário clique em outra resposta
@@ -192,15 +225,11 @@ class QuizGame extends Phaser.Scene {
                 wordWrap: {width: 500, useAdvancedWrap: true}
             }).setOrigin(0.5);
 
-            this.timer.paused = true;
-
-            setTimeout(() => {
-                this.score = 0;
-                this.currentQuestion = 0;
-                this.scene.start('ChooseGameScene');
-            }, 3000);
+            this.score = 0;
+            this.currentQuestion = 0;
         } else {
             // Exibe a pergunta e as opções
+
             // Exibe timer
             this.add.rectangle(475, 80, 50, 30, 0x000000).setStrokeStyle(4, 0xffffff);
             this.timerText = this.add.text(475, 80, '10', {
@@ -208,9 +237,6 @@ class QuizGame extends Phaser.Scene {
                 fontSize: 24,
                 color: '#ff0000'
             }).setOrigin(0.5);
-
-            // Inicia o timer
-            this.timer = this.time.addEvent({delay: 16000, callback: this.goToNextQuestion, callbackScope: this});
 
             this.add.rectangle(475, 150, 550, 100, 0x000000).setStrokeStyle(4, 0xffffff);
 
@@ -225,18 +251,18 @@ class QuizGame extends Phaser.Scene {
                 .setInteractive()
                 .on('pointerdown', () => {
                     Answer0.name = "0";
-                    if (parseInt(Answer0.name) === this.questions[parseInt(Answer0.name)].correctAnswer) {
+                    if (parseInt(Answer0.name) === this.questions[this.currentQuestion].correctAnswer) {
                         questionBox.setColor('#00ff00');
                         Answer0.setStrokeStyle(4, 0x00ff00);
                         questionBox.setText("Resposta correta!");
                         // Se a resposta estiver correta, adiciona pontos e passa para a próxima pergunta
                         this.score += 10;
-                        this.timer.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
                         Answer1.disableInteractive();
                         Answer2.disableInteractive();
+                        this.timer.paused = true;
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
@@ -245,13 +271,12 @@ class QuizGame extends Phaser.Scene {
                         console.log("Resposta errada!");
                         // Se a resposta estiver errada, mostra a explicação e passa para a próxima pergunta
                         questionBox.setText(this.questions[this.currentQuestion].explanation);
-                        // Pausa o timer
-                        this.timer.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
                         Answer1.disableInteractive();
                         Answer2.disableInteractive();
+                        this.timer.paused = true;
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
@@ -271,16 +296,18 @@ class QuizGame extends Phaser.Scene {
                 .setInteractive()
                 .on('pointerdown', () => {
                     Answer1.name = "1";
-                    if (parseInt(Answer1.name) === this.questions[parseInt(Answer1.name)].correctAnswer) {
+                    if (parseInt(Answer1.name) === this.questions[this.currentQuestion].correctAnswer) {
+                        questionBox.setColor('#00ff00');
+                        Answer1.setStrokeStyle(4, 0x00ff00);
                         questionBox.setText("Resposta correta!");
                         // Se a resposta estiver correta, adiciona pontos e passa para a próxima pergunta
                         this.score += 10;
-                        this.timer.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
                         Answer1.disableInteractive();
                         Answer2.disableInteractive();
+                        this.timer.paused = true;
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
@@ -289,13 +316,12 @@ class QuizGame extends Phaser.Scene {
                         console.log("Resposta errada!");
                         // Se a resposta estiver errada, mostra a explicação e passa para a próxima pergunta
                         questionBox.setText(this.questions[this.currentQuestion].explanation);
-                        // Tira o timer
-                        this.time.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
                         Answer1.disableInteractive();
                         Answer2.disableInteractive();
+                        this.timer.paused = true;
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
@@ -315,16 +341,18 @@ class QuizGame extends Phaser.Scene {
                 .setInteractive()
                 .on('pointerdown', () => {
                     Answer2.name = "2";
-                    if (parseInt(Answer2.name) === this.questions[parseInt(Answer2.name)].correctAnswer) {
+                    if (parseInt(Answer2.name) === this.questions[this.currentQuestion].correctAnswer) {
+                        questionBox.setColor('#00ff00');
+                        Answer2.setStrokeStyle(4, 0x00ff00);
                         questionBox.setText("Resposta correta!");
                         // Se a resposta estiver correta, adiciona pontos e passa para a próxima pergunta
                         this.score += 10;
-                        this.timer.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
                         Answer1.disableInteractive();
                         Answer2.disableInteractive();
+                        this.timer.paused = true;
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
@@ -333,13 +361,12 @@ class QuizGame extends Phaser.Scene {
                         console.log("Resposta errada!");
                         // Se a resposta estiver errada, mostra a explicação e passa para a próxima pergunta
                         questionBox.setText(this.questions[this.currentQuestion].explanation);
-                        // Pauser o timer
-                        this.timer.paused = true;
                         this.currentQuestion++;
                         // impede que o usuário clique em outra resposta
                         Answer0.disableInteractive();
                         Answer1.disableInteractive();
                         Answer2.disableInteractive();
+                        this.timer.paused = true;
                         // espera 1 segundo e passa para a próxima pergunta
                         setTimeout(() => {
                             this.showNextQuestion();
@@ -354,6 +381,8 @@ class QuizGame extends Phaser.Scene {
                 color: '#000000',
                 wordWrap: {width: 500, height: 50, useAdvancedWrap: true}
             }).setOrigin(0.5);
+
+
         }
 
     }
@@ -368,6 +397,10 @@ class QuizGame extends Phaser.Scene {
         this.timerText.setText(Math.floor((16000 - this.timer.getElapsed()) / 1000));
     }
 
+    loadMenuScene() {
+        this.scene.start('Menu');
+    }
+
 }
 
 class Phising extends Phaser.Scene {
@@ -376,7 +409,7 @@ class Phising extends Phaser.Scene {
     }
 
     preload() {
-        this.load.image('monitor', monitor);
+        this.load.image('monitor', 'https://cen-api.nw.r.appspot.com/asset?fileName=monitor.jpg');
         let score = 0;
         let scoreText;
     }
@@ -533,26 +566,12 @@ class Phising extends Phaser.Scene {
 }
 
 class MemoryCard extends Phaser.Game {
-
     constructor() {
-
-        //   var config = {
-        //     type: Phaser.AUTO,
-        //     width: 950,
-        //     height: 600,
-        //     physics: {
-        //       default: 'arcade',
-        //       arcade: {
-        //         gravity: { y: 200 }
-        //       }
-        //     },
-        //   };
         super(config);
         this.scene.add('MemoryCard', Board, true);
     }
-}
 
-//window.game = new MemoryCard();
+}
 
 const config = {
     type: Phaser.AUTO,
