@@ -203,14 +203,14 @@ class QuizGame extends Phaser.Scene {
 
         this.add.text(120, 525, 'Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
 
-        this.timer = this.time.addEvent({ delay: 16000, callback: this.goToNextQuestion, callbackScope: this });
+        this.timer = this.time.addEvent({delay: 16000, callback: this.goToNextQuestion, callbackScope: this});
         this.showNextQuestion();
     }
 
     showNextQuestion() {
         // Reinicia o timer
         this.timer.remove();
-        this.timer = this.time.addEvent({ delay: 16000, callback: this.goToNextQuestion, callbackScope: this });
+        this.timer = this.time.addEvent({delay: 16000, callback: this.goToNextQuestion, callbackScope: this});
         this.timer.paused = false;
         if (this.currentQuestion >= this.questions.length) {
             // Exibe a pontuação final e reinicia o jogo
@@ -406,163 +406,305 @@ class QuizGame extends Phaser.Scene {
 class Phising extends Phaser.Scene {
     constructor() {
         super({key: 'Phising'});
+
+        this.score = 0;
+        this.currentEmailIndex = 0;
+
+        this.contentText;
+
+        this.emails = [
+            {
+                content: '\n\n\nVc ganhou um premio!!' + '' +
+                    'Clique no link abaxo p/a resgatalo:\n' +
+                    'www.premioimeditado.com.pt\n',
+                answer: 'Phishing',
+                answered: false,
+                explanation: 'Fique atento a erros da ortografia ou escrita muito reduzida.'
+            },
+            {
+                content: '\n\n\nMensagem Urgente do Banco Nacional!!!!\n' +
+                    'Compra de 10.500,00 euros não identificada na sua conta!\n' +
+                    'Clique no link a baixo o mais rápido possível para cancelar a operação ou sua conta vai ser liquidada!!\n' +
+                    'http://www.bancoonacional.ru\n',
+                answer: 'Phishing',
+                answered: false,
+                explanation: 'Atenção a URLs suspeitas e situações muito exageradas'
+            },
+            {
+                content: '\n\n\nNotificação de segurança\n' + 'As senhas devem ser trocadas a cada 6 meses para evitar fraudes, logue na sua conta e mude para uma nova até dia X.',
+                answer: 'Legítimo',
+                answered: false,
+                explanation: 'Não houve nenhuma situação alarmente e não pediu nenhuma ação adicional, pode ser seguro, verifique seus dados.'
+            },
+            {
+                content: '\n\n\n\nSua conta foi comprometida.\n' +
+                    '\nIndentificamos uma anormalidade no seu login, cheque seu aplicativo de autenticação e logue para confirmar sua identidade.',
+                answer: 'Legítimo',
+                answered: false,
+                explanation: '\n\nUm serviço nunca vai pedir informações adicionais e sempre vai pedir para confirmar sua indentidade de maneira que não seja por meio externo ao próprio serviço.'
+            }
+        ];
+
     }
 
     preload() {
         this.load.image('monitor', 'https://cen-api.nw.r.appspot.com/asset?fileName=monitor.jpg');
-        let score = 0;
-        let scoreText;
     }
 
     create() {
 
-        // Nível 1 background
-        this.add.image(475, 300, 'monitor');
+        // Camera background
+        this.cameras.main.setBackgroundColor('#000042');
+
+        // background
+        this.add.image(460, 300, 'monitor');
 
         // Email list background
-        this.add.rectangle(365, 253, 395, 250, 0xfddddd);
+        this.add.rectangle(450, 253, 395, 250, 0x00809B);
 
         // Email inbox title
-        this.add.text(475, 150, 'Email inbox', {fontFamily: 'Arial', fontSize: 32, color: '#000000'}).setOrigin(0.5);
+        this.add.text(460, 170, 'Email inbox', {fontFamily: 'Arial', fontSize: 32, color: '#FFFFFF'})
+            .setOrigin(0.5);
 
         // Email list items
         const email1 = this.add.text(275, 220, '1. You have won a prize!', {
             fontFamily: 'Arial',
-            fontSize: 20,
-            color: '#000000'
-        });
-
-// Add button to email item
-        const email1Button = this.add.graphics()
-            .fillStyle(0x00ff00)
-            .fillRoundedRect(630, 210, 60, 35, 15)
-            .setInteractive();
-
-        email1Button.on('pointerdown', () => {
-            const message = 'Congratulations! You have won a prize.';
-            const alertBox = this.add.graphics()
-                .setDepth(1)
-                .fillStyle(0xffffff)
-                .fillRect(200, 150, 475, 200)
-                .setAlpha(0.9);
-
-            const alertText = this.add.text(475, 200, 'Hello', {
-                fontFamily: 'Arial',
-                fontSize: 30,
-                color: '#000000'
-            }).setOrigin(0.5);
-
-            this.time.delayedCall(5000, () => {
-                alertBox.destroy();
-                alertText.destroy();
-            });
-        });
-
-        this.add.text(585, 227, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
-
-
-        // Add the dialog plugin to the scene
-        this.dialogPlugin = this.plugins.get('rexDialog');
-
-
-        const email2 = this.add.text(200, 260, '2. Urgent message from your bank', {
-            fontFamily: 'Arial',
-            fontSize: 20,
-            color: '#000000'
+            fontSize: 16,
+            color: '#FFFFFF'
         });
 
         // Add button to email item
-        const email2Button = this.add.graphics()
-            .fillStyle(0x00ff00)
-            .fillRoundedRect(555, 250, 60, 35, 15)
+        const email1Button = this.add.rectangle(605, 230, 60, 35, 0x00ff00)
             .setInteractive()
-            .on('pointerdown', function () {
-                const message = 'Your bank took your money, have a nice day!';
-                this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-            }, this);
-        this.add.text(585, 267, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
+            .on('pointerdown', this.openEmail1, this);
+        this.add.text(585, 220, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'})
 
+        // Se o email já foi respondido, o retângulo fica vermelho
+        if (this.emails[0].answered) {
+            email1Button.setFillStyle(0xff0000);
+        }
 
-        const email3 = this.add.text(200, 300, '3. Important security update', {
+        const email2 = this.add.text(275, 260, '2. Urgent message from your bank', {
             fontFamily: 'Arial',
-            fontSize: 20,
-            color: '#000000'
+            fontSize: 16,
+            color: '#FFFFFF'
         });
 
         // Add button to email item
-        const email3Button = this.add.graphics()
-            .fillStyle(0x00ff00)
-            .fillRoundedRect(555, 290, 60, 35, 15)
+
+        const email2Button = this.add.rectangle(605, 270, 60, 35, 0x00ff00)
             .setInteractive()
-            .on('pointerdown', function () {
-                const message = 'Your bank took your money, have a nice day!';
-                this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-            }, this);
-        this.add.text(585, 306, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
+            .on('pointerdown', this.openEmail2, this);
+        this.add.text(585, 260, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#FFFFFF'});
 
+        // Se o email já foi respondido, o retângulo fica vermelho
+        if (this.emails[1].answered) {
+            email2Button.setFillStyle(0xff0000);
+        }
 
-        const email4 = this.add.text(200, 340, '4. Your account has been compromised', {
+        const email3 = this.add.text(275, 300, '3. Important security update', {
             fontFamily: 'Arial',
-            fontSize: 20,
-            color: '#000000'
+            fontSize: 16,
+            color: '#FFFFFF'
         });
 
         // Add button to email item
-        const email4Button = this.add.graphics()
-            .fillStyle(0x00ff00)
-            .fillRoundedRect(555, 330, 60, 35, 15)
+        const email3Button = this.add.rectangle(605, 310, 60, 35, 0x00ff00)
             .setInteractive()
-            .on('pointerdown', function () {
-                const message = 'Your bank took your money, have a nice day!';
-                this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-            }, this);
-        this.add.text(585, 346, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#ffffff'}).setOrigin(0.5);
+            .on('pointerdown', this.openEmail3, this);
+        this.add.text(585, 300, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#FFFFFF'});
 
+        // Se o email já foi respondido, o retângulo fica vermelho
+        if (this.emails[2].answered) {
+            email3Button.setFillStyle(0xff0000);
+        }
 
-        // BOTAO DE VOLTAR -> vai para choose game
-        this.add.circle(192, 487, 32, 0xffffff)
+        const email4 = this.add.text(275, 340, '4. Your account has been compromised', {
+            fontFamily: 'Arial',
+            fontSize: 16,
+            color: '#FFFFFF'
+        });
+
+        // Add button to email item
+        const email4Button = this.add.rectangle(605, 350, 60, 35, 0x00ff00)
+            .setInteractive()
+            .on('pointerdown', this.openEmail4, this);
+        this.add.text(585, 338, 'Open', {fontFamily: 'Arial', fontSize: 16, color: '#FFFFFF'});
+
+        // Se o email já foi respondido, o retângulo fica vermelho
+        if (this.emails[3].answered) {
+            email4Button.setFillStyle(0xff0000);
+        }
+
+        // Voltar
+        this.add.circle(250, 487, 32, 0xffffff)
             .setInteractive()
             .on('pointerdown', this.loadChooseGameScene, this)
             .setStrokeStyle(4, 0x000000)
             .setAlpha(0.1);
-        // this.add.text(200, 475, ' ', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
 
+        // Verifica se todos os emails já foram respondidos
+        if (this.emails[0].answered && this.emails[1].answered && this.emails[2].answered && this.emails[3].answered) {
+            // Carrega cena de inbox vazia e mostra pontuação
 
-        // // BOTAO DE X -> vai para choose game
-        // this.add.rectangle(700, 50, 50, 50, 0xff0000)
-        //         .setInteractive()
-        //         .on('pointerdown', this.loadChooseGameScene, this)
-        //         .setStrokeStyle(4, 0x000000);
+            //this.scene.start('Phising');
+            this.removeButtons();
+            this.add.text(300, 170, 'Você respondeu todos os emails!', {
+                fontFamily: 'Arial',
+                fontSize: 16,
+                color: '#000000',
+                wordWrap: {width: 400, height: 50, useAdvancedWrap: true}
+            });
+            // Exibir pontuação
+            this.add.text(300, 200, 'Pontuação Final: ' + this.score, {
+                fontFamily: 'Arial',
+                fontSize: 16,
+                color: '#000000',
+                wordWrap: {width: 400, height: 50, useAdvancedWrap: true}
+            });
+        }
 
-        // this.add.text(700, 50, 'X', {fontFamily: 'Arial', fontSize: 24, color: '#ffffff'}).setOrigin(0.5);
+    }
 
+    openEmail1() {
+        this.currentEmailIndex = 0;
+        // Exibir o conteúdo do email 1 e adicionar os botões de phishing e legítimo
+        this.displayEmailContent(this.emails[0].content
+            , ['Phishing', 'Legítimo', 'Voltar']);
+    }
+
+    openEmail2() {
+        this.currentEmailIndex = 1;
+        // Exibir o conteúdo do email 2 e adicionar os botões de phishing e legítimo
+        this.displayEmailContent(this.emails[1].content
+            , ['Phishing', 'Legítimo', 'Voltar']);
+    }
+
+    openEmail3() {
+        this.currentEmailIndex = 2;
+        // Exibir o conteúdo do email 3 e adicionar os botões de phishing e legítimo
+        this.displayEmailContent(this.emails[2].content
+            , ['Phishing', 'Legítimo', 'Voltar']);
+    }
+
+    openEmail4() {
+        this.currentEmailIndex = 3;
+        // Exibir o conteúdo do email 4 e adicionar os botões de phishing e legítimo
+        this.displayEmailContent(this.emails[3].content
+            , ['Phishing', 'Legítimo', 'Voltar']);
+    }
+
+    displayEmailContent(emailText, options) {
+        // Remover os botões anteriores (se houver)
+        this.removeButtons();
+
+        // Mostrar o conteúdo do email
+        this.contentText = this.add.text(450, 170, emailText, {
+            fontFamily: 'Arial',
+            fontSize: 16,
+            color: '#000000',
+            wordWrap: {width: 300, height: 50, useAdvancedWrap: true}
+        }).setOrigin(0.5);
+
+        // Exibir o conteúdo do email
+
+        // Adicionar os botões de phishing e legítimo
+        const buttonX = 350;
+        const buttonY = 345;
+        const buttonSpacing = 100;
+
+        // Exibe as opções
+        for (let i = 0; i < options.length; i++) {
+            const option = options[i];
+
+            const button = this.add.rectangle(buttonX + i * buttonSpacing, buttonY, 80, 40, 0x00ff00)
+                .setInteractive()
+                .on('pointerdown', () => this.selectOption(option));
+            this.add.text(buttonX + i * buttonSpacing, buttonY, option, {
+                fontFamily: 'Arial',
+                fontSize: 16,
+                color: '#FFFFFF'
+            })
+                .setOrigin(0.5);
+        }
+    }
+
+    selectOption(option) {
+        // Lógica para tratar a opção selecionada (Phishing ou Legítimo)
+        console.log('Option selected:', option);
+        console.log('Current email index:', this.currentEmailIndex);
+        console.log('Current email answer', this.emails[this.currentEmailIndex].answer)
+
+        // Verificar se já foi respondido true ou false
+        if (this.emails[this.currentEmailIndex].answered) {
+            this.scene.start('Phising');
+        }
+
+        // Se a opção for voltar, voltar para o email inbox
+        if (option === 'Voltar') {
+            this.scene.start('Phising');
+        }
+
+        // Se a resposta for correta, adicionar 1 ponto e substituir o texto do email por "Correto"
+
+        if (option === this.emails[this.currentEmailIndex].answer && option !== 'Voltar') {
+            console.log("Acertou.")
+            this.score += 10;
+            this.emails[this.currentEmailIndex].answered = true;
+            this.emails[this.currentEmailIndex].content = 'Correto!';
+            // Exibe o conteúdo do email novamente
+            this.contentText.destroy();
+            this.add.text(450, 170, this.emails[this.currentEmailIndex].content, {
+                fontFamily: 'Arial',
+                fontSize: 16,
+                color: '#000000',
+                wordWrap: {width: 300, height: 50, useAdvancedWrap: true}
+            }).setOrigin(0.5);
+
+        } else if (option === this.emails[this.currentEmailIndex].answer && option !== 'Voltar') {
+            console.log("Acertou.")
+            this.score += 10;
+            this.emails[this.currentEmailIndex].answered = true;
+            this.emails[this.currentEmailIndex].content = 'Correto!';
+            // Exibe o conteúdo do email novamente
+            this.contentText.destroy();
+            this.add.text(450, 170, this.emails[this.currentEmailIndex].content, {
+                fontFamily: 'Arial',
+                fontSize: 16,
+                color: '#000000',
+                wordWrap: {width: 300, height: 50, useAdvancedWrap: true}
+            }).setOrigin(0.5);
+        } else if (option !== this.emails[this.currentEmailIndex].answer && option !== 'Voltar') {
+            console.log("Errou.")
+            this.emails[this.currentEmailIndex].answered = true;
+            this.emails[this.currentEmailIndex].content = 'Incorreto';
+            // Mostra a explicação do porquê a resposta está incorreta
+            this.emails[this.currentEmailIndex].content = this.emails[this.currentEmailIndex].explanation;
+            // Exibe o conteúdo do email novamente
+            this.contentText.destroy();
+            this.add.text(450, 170, this.emails[this.currentEmailIndex].content, {
+                fontFamily: 'Arial',
+                fontSize: 16,
+                color: '#000000',
+                wordWrap: {width: 300, height: 50, useAdvancedWrap: true}
+            }).setOrigin(0.5);
+        }
+    }
+
+    removeButtons() {
+        // Disabilitar todos os botões de open
+        this.children.list.forEach(child => {
+            if (child.type === 'Rectangle') child.disableInteractive();
+        });
+        // Remover os botões de phishing e legítimo
+        this.children.list = this.children.list.filter(child => child.type !== 'Rectangle');
     }
 
     loadChooseGameScene() {
         this.scene.start('ChooseGameScene');
     }
 
-    showPopup(title, message) {
-        // Create the popup background
-        const popupBackground = this.add.rectangle(475, 300, 500, 200, 0xffffff);
-        popupBackground.setStrokeStyle(4, 0x000000);
 
-        // Add the popup title and message
-        this.add.text(475, 250, title, {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-        this.add.text(475, 300, message, {fontFamily: 'Arial', fontSize: 20, color: '#000000'}).setOrigin(0.5);
-
-        // Add the close button
-        const closeButton = this.add.rectangle(475, 350, 100, 50, 0xff0000)
-            .setInteractive()
-            .on('pointerdown', function () {
-                // Remove the popup from the scene
-                popupBackground.destroy();
-                popupTitle.destroy();
-                popupMessage.destroy();
-                closeButton.destroy();
-            }, this);
-        this.add.text(475, 350, 'Close', {fontFamily: 'Arial', fontSize: 20, color: '#ffffff'}).setOrigin(0.5);
-    }
 }
 
 class MemoryCard extends Phaser.Game {
