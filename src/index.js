@@ -75,7 +75,7 @@ class ChooseGameScene extends Phaser.Scene {
             .on('pointerdown', this.loadPhising, this)
             .setStrokeStyle(4, 0x000000);
 
-        this.add.text(475, 350, 'Phising', {fontFamily: 'Arial', fontSize: 22, color: '#000000'}).setOrigin(0.5);
+        this.add.text(475, 350, 'Phishing', {fontFamily: 'Arial', fontSize: 22, color: '#000000'}).setOrigin(0.5);
         // Game 3
         this.add.rectangle(675, 350, 100, 50, 0xffffff)
             .setInteractive()

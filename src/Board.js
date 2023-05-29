@@ -16,6 +16,7 @@ export default class GameScene {
   init() { }
   preload ()
   {
+    
     this._loadCards();
     this._newRound();
     // Load the background image
@@ -65,6 +66,31 @@ export default class GameScene {
     
   }
 
+  _restartGame() {
+
+      // Clear the selected cards array
+    this.selectedCards = [];
+
+    // Reset the attempts counter
+    this.attempts = 0;
+
+    // Clear the matched cards array
+    this.matchedCards = [];
+
+    // Face all cards down
+    this.cards.forEach((card) => card.faceDown());
+
+    // Reset the score text
+    if (this.score) {
+      this.score.destroy();
+      this.score = null;
+    }
+
+    // Start a new round
+    this._newRound();
+
+  }
+
   _updateScore() {
     var style = {
       font: 'bold 32px Arial',
@@ -84,7 +110,57 @@ export default class GameScene {
     const matchedCardCount = this._matchedCards();
     let message = '';
   
-    if (matchedCardCount === 0) {
+    if (matchedCardCount === 5) {
+      // Create the popup container
+      const popup = this.add.container(this.cameras.main.width / 2, this.cameras.main.height / 2);
+      popup.setDepth(1);
+  
+      // Create the background rectangle
+      const background = this.add.rectangle(0, 0, 400, 200, 0x000000, 0.9);
+      popup.add(background);
+  
+      // Create the message text
+      const congratsText = this.add.text(0, -50, 'Parabéns! ', {
+        font: 'bold 32px Arial',
+        fill: '#fff',
+        boundsAlignH: 'center',
+        boundsAlignV: 'middle'
+      });
+      congratsText.setOrigin(0.5);
+      popup.add(congratsText);
+  
+       // Create the efficiency text
+      const efficiencyText = this.add.text(0, -15, `Eficiência: ${efficiency}%`, {
+        font: 'bold 24px Arial',
+        fill: '#fff',
+        boundsAlignH: 'center',
+        boundsAlignV: 'middle'
+      });
+      efficiencyText.setOrigin(0.5);
+      popup.add(efficiencyText);
+
+      // Create the reset button
+      const resetButton = this.add.text(0, 50, '> Próximo Jogo', {
+        font: 'bold 24px Arial',
+        fill: '#fff',
+        boundsAlignH: 'center',
+        boundsAlignV: 'middle',
+        backgroundColor: '#37FD12',
+        padding: {
+          x: 10,
+          y: 5
+        }
+      });
+      resetButton.setOrigin(0.5);
+      resetButton.setInteractive({ useHandCursor: true });
+      resetButton.on('pointerdown', () => {
+        // Destroy the popup
+        popup.destroy();
+        this.scene.stop();
+        this.scene.start('ChooseGameScene')        
+      });
+      popup.add(resetButton);
+    } else if (matchedCardCount === 0) {
       message = 'Sem cartas par!';
     } else {
       const matchedCardKeys = this.selectedCards.map((card) => card.key);
@@ -229,18 +305,18 @@ export default class GameScene {
       this.cards.push(new Card( {key, gameScene: this, ...posB, handler: this._cardClickHandler.bind(this)} ));
     }
 
-  this.add.rectangle(475, 500, 945, 200, 0x000000)
-        .setStrokeStyle(4, 0xffffff);
-  this.add.rectangle(815, 544, 200, 50, 0xffffff)
-      .setInteractive()
-      .on('pointerdown', this.loadChooseGameScene, this)
-      .setStrokeStyle(4, 0x000000);
+    this.add.rectangle(475, 500, 945, 200, 0x000000)
+          .setStrokeStyle(4, 0xffffff);
+    this.add.rectangle(815, 544, 200, 50, 0xffffff)
+        .setInteractive()
+        .on('pointerdown', this.loadChooseGameScene, this)
+        .setStrokeStyle(4, 0x000000);
 
-  this.add.text(815, 544, '↩ Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
-  }
+    this.add.text(815, 544, '↩ Voltar', {fontFamily: 'Arial', fontSize: 24, color: '#000000'}).setOrigin(0.5);
+    }
 
-  loadChooseGameScene() {
-      this.scene.start('ChooseGameScene');
-  }
+    loadChooseGameScene() {
+        this.scene.start('ChooseGameScene');
+    }
     
 }
