@@ -12,7 +12,7 @@ Loading images via JavaScript module `import` is also supported, although not re
 ## API Architecture | Arquitetura da API
 
 <div align="center">
-  <img src="https://github.com/DjdogeGamer/Projeto-CEN/assets/69666481/fb9b7a9a-9b67-40ef-a841-41b47c4670da">
+  <img src="https://github.com/DjdogeGamer/Projeto-CEN/assets/69666481/baae6815-e524-4420-971c-5eec74743688">
 </div>
 
 ## Requirements | Requisitos
